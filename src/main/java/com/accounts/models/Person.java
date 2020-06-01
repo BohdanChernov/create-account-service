@@ -15,19 +15,19 @@ import java.time.LocalDate;
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(nullable = false)
-    String firstName;
+    private String firstName;
     @Column(nullable = false)
-    String lastName;
+    private String lastName;
     @Column(unique = true, nullable = false)
-    String email;
+    private String email;
     @Column(nullable = false)
-    String password;
-    LocalDate date;
+    private String password;
+    private LocalDate date;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    Sex sex;
+    private Sex sex;
 
     public Person(String firstName, String lastName, String email, String password, Sex sex) {
         this.firstName = firstName;

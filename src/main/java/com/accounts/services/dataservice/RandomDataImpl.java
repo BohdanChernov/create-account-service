@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 @Scope("prototype")
-public class RandomDataImpl implements RandomData {
+public final class RandomDataImpl implements RandomData {
     @Autowired
     private FemaleFirstNameDAO femaleFirstNameDAO;
     @Autowired
@@ -24,6 +24,9 @@ public class RandomDataImpl implements RandomData {
     private MaleFirstNameDAO maleFirstNameDAO;
     @Autowired
     private MaleLastNameDAO maleLastNameDAO;
+
+    private final static int MAX_RANDOM_NUMBER = 1000;
+    private final static int MAX_SIZE_OF_PASSWORD = 10;
 
     @Override
     public String getFirstName(Sex sex) {
@@ -69,7 +72,7 @@ public class RandomDataImpl implements RandomData {
                 .replace("\'", "")
                 .replace("ʹ", "");
 
-        int max = 1000;
+        int max = MAX_RANDOM_NUMBER;
         int min = 1;
         int range = max - min + 1;
         int randomNumber = (int) (Math.random() * range) + min;
@@ -79,7 +82,7 @@ public class RandomDataImpl implements RandomData {
 
     @Override
     public String getPassword() {
-        return RandomStringUtils.random(10, true, true);
+        return RandomStringUtils.random(MAX_SIZE_OF_PASSWORD, true, true);
     }
 
     @Override

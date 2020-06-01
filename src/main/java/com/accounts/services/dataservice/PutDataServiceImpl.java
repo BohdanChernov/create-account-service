@@ -19,7 +19,7 @@ import java.io.IOException;
 
 @Component
 @Scope("prototype")
-public class PutDataServiceImpl implements PutDataService {
+public final class PutDataServiceImpl implements PutDataService {
     @Autowired
     private FemaleFirstNameDAO femaleFirstNameDAO;
     @Autowired
@@ -31,13 +31,9 @@ public class PutDataServiceImpl implements PutDataService {
 
     @Override
     public void putFemaleFirstNames(String path) {
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             while (bufferedReader.ready()) {
                 String line = bufferedReader.readLine();
-
                 try {
                     femaleFirstNameDAO.save(new FemaleFirstName(line));
                 } catch (Exception e) {
@@ -53,36 +49,27 @@ public class PutDataServiceImpl implements PutDataService {
 
     @Override
     public void putFemaleLastNames(String path) {
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))){
             while (bufferedReader.ready()) {
                 String line = bufferedReader.readLine();
-
                 try {
                     femaleLastNameDAO.save(new FemaleLastName(line));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch(FileNotFoundException e){
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch(IOException e){
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void putMaleFirstNames(String path) {
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             while (bufferedReader.ready()) {
                 String line = bufferedReader.readLine();
-
                 try {
                     maleFirstNameDAO.save(new MaleFirstName(line));
                 } catch (Exception e) {
@@ -98,13 +85,9 @@ public class PutDataServiceImpl implements PutDataService {
 
     @Override
     public void putMaleLastNames(String path) {
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))){
             while (bufferedReader.ready()) {
                 String line = bufferedReader.readLine();
-
                 try {
                     maleLastNameDAO.save(new MaleLastName(line));
                 } catch (Exception e) {

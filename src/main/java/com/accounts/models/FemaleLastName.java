@@ -14,9 +14,9 @@ import javax.persistence.*;
 public class FemaleLastName {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(unique = true, nullable = false)
-    String value;
+    private String value;
 
     public FemaleLastName(String value) {
         this.value = value;

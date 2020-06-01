@@ -21,8 +21,10 @@ import java.util.regex.Pattern;
 
 @Component
 @Scope("prototype")
-public class ProxyParserServiceImpl implements ProxyParserService {
+public final class ProxyParserServiceImpl implements ProxyParserService {
     private WebDriver driver;
+    private final static int TIMEOUT_TO_LOAD_MS = 5000;
+    private final static int MIN_SIZE_OF_PROXY_DATABASE = 50;
 
     @Autowired
     private ProxyServerDAO proxyServerDAO;
@@ -34,7 +36,7 @@ public class ProxyParserServiceImpl implements ProxyParserService {
     public List<ProxyServer> getProxies() {
         installConnection();
         try {
-            Thread.sleep(5000);
+            Thread.sleep(TIMEOUT_TO_LOAD_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -66,7 +68,7 @@ public class ProxyParserServiceImpl implements ProxyParserService {
     public ProxyServer getRandomProxy() {
         List<ProxyServer> proxies = proxyServerDAO.findAll();
 
-        if (proxies.size() < 50) {
+        if (proxies.size() < MIN_SIZE_OF_PROXY_DATABASE) {
             getProxies();
         }
 
@@ -105,7 +107,7 @@ public class ProxyParserServiceImpl implements ProxyParserService {
         dropDownMenu = new Select(driver.findElement(By.id("xpp")));
         dropDownMenu.selectByVisibleText("500");
         try {
-            Thread.sleep(5000);
+            Thread.sleep(TIMEOUT_TO_LOAD_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -115,7 +117,7 @@ public class ProxyParserServiceImpl implements ProxyParserService {
         JavascriptExecutor js = ((JavascriptExecutor) driver);
         js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
         try {
-            Thread.sleep(5000);
+            Thread.sleep(TIMEOUT_TO_LOAD_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

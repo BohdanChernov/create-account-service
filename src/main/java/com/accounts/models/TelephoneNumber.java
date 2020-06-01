@@ -14,9 +14,9 @@ import javax.persistence.*;
 public class TelephoneNumber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(unique = true, nullable = false)
-    String number;
+    private String number;
     @Column(unique = true, nullable = false)
-    String country;
+    private String country;
 }

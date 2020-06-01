@@ -14,9 +14,9 @@ import javax.persistence.*;
 public class ProxyServer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(unique = true, nullable = false)
-    String address;
+    private String address;
 
     public ProxyServer(String address) {
         this.address = address;

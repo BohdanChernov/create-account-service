@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Component
 @Scope("prototype")
-public class CreateAccountServiceImpl implements CreateAccountService {
+public final class CreateAccountServiceImpl implements CreateAccountService {
     private WebDriver driver;
     private List<WebElement> inputsToFill;
     private ChromeOptions options;
@@ -41,9 +41,9 @@ public class CreateAccountServiceImpl implements CreateAccountService {
     @Autowired
     private ProxyServerDAO proxyServerDAO;
     @Autowired
-    ProxyParserService proxyParserService;
+    private ProxyParserService proxyParserService;
     @Autowired
-    GetNumberService getNumberService;
+    private GetNumberService getNumberService;
 
     @Value("${web.driver.path}")
     private String webDriverPath;
@@ -54,12 +54,16 @@ public class CreateAccountServiceImpl implements CreateAccountService {
     @Value("${url.to.connect}")
     private String urlToConnect;
 
+    private final static int INDEX_OF_FIRST_NAME = 0;
+    private final static int INDEX_OF_LAST_NAME = 1;
+    private final static int INDEX_OF_EMAIL = 2;
+    private final static int INDEX_OF_PASSWORD = 3;
+    private final static int INDEX_OF_RE_PASSWORD = 4;
+
+
     public Person getPersonData() {
         installConnection();
-        Person personToSend = putDataIntoFieldsAndSaveData();
-
-
-        return personToSend;
+        return putDataIntoFieldsAndSaveData();
     }
 
     public Person putDataIntoFieldsAndSaveData() {
@@ -70,7 +74,6 @@ public class CreateAccountServiceImpl implements CreateAccountService {
         String password = randomData.getPassword();
 
         writeAllData(firstName, lastName, email, password);
-        int i = 0;
         clickNextButton();
 
         while (isNameTaken() || isNameTooShort()) {
@@ -108,9 +111,7 @@ public class CreateAccountServiceImpl implements CreateAccountService {
             driver.get(urlToConnect);
             logs = driver.manage().logs().get("browser");
         }
-
         getInputsToFill();
-        int i = 0;
     }
 
     public void setUpConnection() {
@@ -133,8 +134,9 @@ public class CreateAccountServiceImpl implements CreateAccountService {
         List<WebElement> werErrorElements = new ArrayList<>();
         werErrorElements = driver.findElements(By.id("main-frame-error"));
         boolean isWorking = false;
-        if (werErrorElements.size() == 0 && isPageDownloaded() && noProxyAuthentication())
+        if (werErrorElements.size() == 0 && isPageDownloaded() && noProxyAuthentication()) {
             isWorking = true;
+        }
         return isWorking;
     }
 
@@ -143,8 +145,9 @@ public class CreateAccountServiceImpl implements CreateAccountService {
         try {
             WebElement emptyHtml = driver.findElement(By.tagName("html"));
             String emptyHtmlText = emptyHtml.getText();
-            if (emptyHtmlText.equals(""))
+            if (emptyHtmlText.equals("")) {
                 noAuthentication = false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("The request to login is absent");
@@ -173,8 +176,7 @@ public class CreateAccountServiceImpl implements CreateAccountService {
         } catch (Exception e) {
             System.out.println("Элемент: \"That username is taken. Try another.\" - не найдет");
         }
-        boolean nameIsTaken = webElement.isPresent();
-        return nameIsTaken;
+        return webElement.isPresent();
     }
 
     public boolean isNameTooShort() {
@@ -185,30 +187,29 @@ public class CreateAccountServiceImpl implements CreateAccountService {
         } catch (Exception e) {
             System.out.println("Элемент: \"Sorry, your username must be between 6 and 30 characters long.\" - не найдет");
         }
-        boolean nameIsTooShort = webElement.isPresent();
-        return nameIsTooShort;
+        return webElement.isPresent();
     }
 
     public void writeFirstName(String firstName) {
-        inputsToFill.get(0).clear();
-        inputsToFill.get(0).sendKeys(firstName);
+        inputsToFill.get(INDEX_OF_FIRST_NAME).clear();
+        inputsToFill.get(INDEX_OF_FIRST_NAME).sendKeys(firstName);
     }
 
     public void writeLastName(String lastName) {
-        inputsToFill.get(1).clear();
-        inputsToFill.get(1).sendKeys(lastName);
+        inputsToFill.get(INDEX_OF_LAST_NAME).clear();
+        inputsToFill.get(INDEX_OF_LAST_NAME).sendKeys(lastName);
     }
 
     public void writeEmail(String email) {
-        inputsToFill.get(2).clear();
-        inputsToFill.get(2).sendKeys(email);
+        inputsToFill.get(INDEX_OF_EMAIL).clear();
+        inputsToFill.get(INDEX_OF_EMAIL).sendKeys(email);
     }
 
     public void writePassword(String password) {
-        inputsToFill.get(3).clear();
-        inputsToFill.get(3).sendKeys(password);
-        inputsToFill.get(4).clear();
-        inputsToFill.get(4).sendKeys(password);
+        inputsToFill.get(INDEX_OF_PASSWORD).clear();
+        inputsToFill.get(INDEX_OF_PASSWORD).sendKeys(password);
+        inputsToFill.get(INDEX_OF_RE_PASSWORD).clear();
+        inputsToFill.get(INDEX_OF_RE_PASSWORD).sendKeys(password);
     }
 
     public void writeAllData(String firstName, String lastName, String email, String password) {
